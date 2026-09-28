@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>My Portfolio</title>
+<title>Rishu - Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
  background:#0f172a;
@@ -9,34 +10,72 @@ body{
  text-align:center;
  font-family:sans-serif;
  padding:20px;
+ margin:0;
 }
 span{ color:#38bdf8; }
 .card{
  background:#1e293b;
  padding:20px;
  border-radius:15px;
- width:300px;
+ width:320px;
  margin:20px auto;
+ box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
 }
-a{
+a.btn{
  background:#38bdf8;
  color:black;
  padding:10px 20px;
  border-radius:20px;
  text-decoration:none;
  font-weight:bold;
+ display:inline-block;
+ margin-top:10px;
+}
+a.btn:hover{
+ background:white;
+}
+.projects{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ gap:15px;
+ margin-top:30px;
 }
 </style>
 </head>
 <body>
 
-<h1>Me <span>Rishu BCA</span> Hu 👑</h1>
-<p>Web Developer</p>
+<!-- TASK 1: Header -->
+<h1>Hi, I'm <span>Rishu</span> 👑</h1>
+<p>BCA Student | Aspiring Web Developer</p>
 
-<div class="card">
-<h3>Meri Website</h3>
-<p>Ye meri portfolio website hai</p>
-<<a href="https://github.com/Rishuu1506" target="_blank">Visit My Site</a>
+<!-- TASK 2: Projects -->
+<h2 style="margin-top:40px;">My <span>Projects</span></h2>
+<div class="projects">
+  <div class="card">
+    <h3>Portfolio Website</h3>
+    <p>Ye meri personal portfolio website hai</p>
+    <a class="btn" href="https://github.com/Rishuu1506" target="_blank">View Code</a>
+  </div>
+  
+  <div class="card">
+    <h3>Project 2 - Coming Soon</h3>
+    <p>Jald hi Calculator App add karenge</p>
+    <a class="btn" href="#">Coming Soon</a>
+  </div>
+
+  <div class="card">
+    <h3>Project 3 - Coming Soon</h3>
+    <p>Jald hi To-Do App add karenge</p>
+    <a class="btn" href="#">Coming Soon</a>
+  </div>
+</div>
+
+<!-- TASK 3: Contact -->
+<div class="card" style="margin-top:40px; width:350px;">
+<h3>Contact Me</h3>
+<p>Job / Internship ke liye contact kare</p>
+<a class="btn" href="https://github.com/Rishuu1506" target="_blank">My GitHub</a>
 </div>
 
 </body>
