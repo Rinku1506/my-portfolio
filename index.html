@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>My Portfolio</title>
+<title>Rinku - Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
  background:#0f172a;
@@ -9,22 +10,36 @@ body{
  text-align:center;
  font-family:sans-serif;
  padding:20px;
+ margin:0;
 }
 span{ color:#38bdf8; }
 .card{
  background:#1e293b;
  padding:20px;
  border-radius:15px;
- width:300px;
+ width:320px;
  margin:20px auto;
+ box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
 }
-a{
+a.btn{
  background:#38bdf8;
  color:black;
  padding:10px 20px;
  border-radius:20px;
  text-decoration:none;
  font-weight:bold;
+ display:inline-block;
+ margin-top:10px;
+}
+a.btn:hover{
+ background:white;
+}
+.projects{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ gap:15px;
+ margin-top:30px;
 }
 </style>
 </head>
