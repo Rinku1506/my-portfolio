@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Game Zone - Rishu</title>
+<style>
+body{margin:0;font-family:Arial;background:#0f172a;color:white;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.box{background:#1e293b;padding:30px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5);text-align:center;width:320px}
+h1{margin:0 0 10px;color:#38bdf8}
+#status{margin:15px 0;font-size:18px;height:25px}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.cell{height:90px;background:#334155;border-radius:12px;font-size:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;transition:0.2s}
+.cell:hover{background:#475569;transform:scale(1.05)}
+.cell.x{color:#38bdf8}
+.cell.o{color:#fb7185}
+button{padding:10px 20px;border:none;border-radius:8px;background:#38bdf8;color:#0f172a;font-weight:bold;cursor:pointer;font-size:16px}
+button:hover{background:#0ea5e9}
+a{color:#94a3b8;text-decoration:none;display:block;margin-top:15px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>Tic-Tac-Toe 🎮</h1>
+<div id="status">Player X ki baari</div>
+<div class="board" id="board"></div>
+<button onclick="resetGame()">Restart Game</button>
+<a href="index.html">← Back to Portfolio</a>
+</div>
+
+<script>
+let board = ["","","","","","","","",""];
+let current = "X";
+let gameActive = true;
+const statusText = document.getElementById("status");
+const boardDiv = document.getElementById("board");
+
+function createBoard(){
+ boardDiv.innerHTML = "";
+ board.forEach((val,i)=>{
+   let div = document.createElement("div");
+   div.className = "cell";
+   div.innerText = val;
+   if(val) div.classList.add(val.toLowerCase());
+   div.onclick = () => makeMove(i);
+   boardDiv.appendChild(div);
+ });
+}
+function makeMove(i){
+ if(board[i]!="" ||!gameActive) return;
+ board[i]=current;
+ checkWinner();
+ current = current=="X"?"O":"X";
+ if(gameActive) statusText.innerText = `Player ${current} ki baari`;
+ createBoard();
+}
+function checkWinner(){
+ const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+ for(let w of wins){
+   if(board[w[0]] && board[w[0]]==board[w[1]] && board[w[0]]==board[w[2]]){
+     statusText.innerText = `Player ${board[w[0]]} Jeet Gaya! 🏆`;
+     gameActive=false; return;
+   }
+ }
+ if(!board.includes("")){
+   statusText.innerText = "Draw ho gaya! 😅";
+   gameActive=false;
+ }
+}
+function resetGame(){
+ board = ["","","","","","","","",""];
+ current="X"; gameActive=true;
+ statusText.innerText="Player X ki baari";
+ createBoard();
+}
+createBoard();
+</script>
+</body>
+</html>
