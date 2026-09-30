@@ -1,76 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Game Zone - Rishu</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You vs AI Bot - Tic Tac Toe</title>
 <style>
-body{margin:0;font-family:Arial;background:#0f172a;color:white;display:flex;justify-content:center;align-items:center;min-height:100vh}
-.box{background:#1e293b;padding:30px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5);text-align:center;width:320px}
-h1{margin:0 0 10px;color:#38bdf8}
-#status{margin:15px 0;font-size:18px;height:25px}
-.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
-.cell{height:90px;background:#334155;border-radius:12px;font-size:40px;display:flex;justify-content:center;align-items:center;cursor:pointer;transition:0.2s}
-.cell:hover{background:#475569;transform:scale(1.05)}
-.cell.x{color:#38bdf8}
-.cell.o{color:#fb7185}
-button{padding:10px 20px;border:none;border-radius:8px;background:#38bdf8;color:#0f172a;font-weight:bold;cursor:pointer;font-size:16px}
-button:hover{background:#0ea5e9}
-a{color:#94a3b8;text-decoration:none;display:block;margin-top:15px;font-size:14px}
+body{font-family:Arial;background:#0f172a;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0}
+h1{margin-bottom:10px}
+#status{margin-bottom:20px;font-size:18px;color:#38bdf8}
+.board{display:grid;grid-template-columns:repeat(3,100px);gap:10px}
+.cell{width:100px;height:100px;background:#1e293b;display:flex;align-items:center;justify-content:center;font-size:50px;cursor:pointer;border-radius:12px;transition:0.2s}
+.cell:hover{background:#334155}
+.cell.x{color:#f472b6}
+.cell.o{color:#22d3ee}
+button{margin-top:20px;padding:10px 20px;border:none;background:#38bdf8;color:black;font-weight:bold;border-radius:8px;cursor:pointer;font-size:16px}
+a{color:#94a3b8;margin-top:15px;text-decoration:none}
 </style>
 </head>
 <body>
-<div class="box">
-<h1>Tic-Tac-Toe 🎮</h1>
-<div id="status">Player X ki baari</div>
+<h1>You (X) vs AI Bot (O)</h1>
+<div id="status">Your Turn!</div>
 <div class="board" id="board"></div>
 <button onclick="resetGame()">Restart Game</button>
 <a href="index.html">← Back to Portfolio</a>
-</div>
 
 <script>
+const boardEl = document.getElementById('board');
+const statusEl = document.getElementById('status');
 let board = ["","","","","","","","",""];
-let current = "X";
 let gameActive = true;
-const statusText = document.getElementById("status");
-const boardDiv = document.getElementById("board");
 
 function createBoard(){
- boardDiv.innerHTML = "";
+ boardEl.innerHTML="";
  board.forEach((val,i)=>{
-   let div = document.createElement("div");
-   div.className = "cell";
-   div.innerText = val;
-   if(val) div.classList.add(val.toLowerCase());
-   div.onclick = () => makeMove(i);
-   boardDiv.appendChild(div);
+   let cell = document.createElement('div');
+   cell.className = `cell ${val}`;
+   cell.innerText = val;
+   cell.addEventListener('click',()=>handleClick(i));
+   boardEl.appendChild(cell);
  });
 }
-function makeMove(i){
- if(board[i]!="" ||!gameActive) return;
- board[i]=current;
- checkWinner();
- current = current=="X"?"O":"X";
- if(gameActive) statusText.innerText = `Player ${current} ki baari`;
+
+function handleClick(i){
+ if(board[i]!== "" ||!gameActive) return;
+ board[i]="X";
  createBoard();
+ if(checkWinner("X")){ statusEl.innerText="You Won! 🎉"; gameActive=false; return; }
+ if(board.every(c=>c!="")){ statusEl.innerText="Draw!"; gameActive=false; return; }
+ statusEl.innerText="AI is thinking...";
+ setTimeout(aiMove,500);
 }
-function checkWinner(){
- const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
- for(let w of wins){
-   if(board[w[0]] && board[w[0]]==board[w[1]] && board[w[0]]==board[w[2]]){
-     statusText.innerText = `Player ${board[w[0]]} Jeet Gaya! 🏆`;
-     gameActive=false; return;
-   }
+
+function aiMove(){
+ let best = findBestMove();
+ if(best!= -1){
+   board[best]="O";
+   createBoard();
+   if(checkWinner("O")){ statusEl.innerText="AI Bot Won! 🤖"; gameActive=false; return; }
+   if(board.every(c=>c!="")){ statusEl.innerText="Draw!"; gameActive=false; return; }
+   statusEl.innerText="Your Turn!";
  }
- if(!board.includes("")){
-   statusText.innerText = "Draw ho gaya! 😅";
-   gameActive=false;
- }
 }
-function resetGame(){
- board = ["","","","","","","","",""];
- current="X"; gameActive=true;
- statusText.innerText="Player X ki baari";
- createBoard();
+
+function checkWinner(p){
+ const win = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+ return win.some(a=> board[a[0]]==p && board[a[1]]==p && board[a[2]]==p);
 }
+
+function findBestMove(){
+ // 1. Win if possible
+ for(let i=0;i<9;i++) if(board[i]==""){ board[i]="O"; if(checkWinner("O")){board[i]=""; return i;} board[i]=""; }
+ // 2. Block player win
+ for(let i=0;i<9;i++) if(board[i]==""){ board[i]="X"; if(checkWinner("X")){board[i]=""; return i;} board[i]=""; }
+ // 3. Center
+ if(board[4]=="") return 4;
+ // 4. Random corner/side
+ let empty = board.map((v,i)=> v==""?i:null).filter(v=>v!=null);
+ return empty.length? empty[Math.floor(Math.random()*empty.length)] : -1;
+}
+
+function resetGame(){ board=["","","","","","","","",""]; gameActive=true; statusEl.innerText="Your Turn!"; createBoard(); }
 createBoard();
 </script>
 </body>
